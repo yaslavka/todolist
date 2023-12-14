@@ -1,0 +1,43 @@
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #6188fb;
+  height: auto;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+.headerCenter{
+  text-align: center;
+  color: white;
+  font-size: 25px;
+  font-weight: 800;
+  @media (max-width: 457px) {
+    display: none;
+  }
+}
+.buttonContainer{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.button{
+  padding: 5px;
+  border: none;
+  background-color: #00ffff00;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover{
+    color: greenyellow;
+  }
+}
+.avatar{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+}

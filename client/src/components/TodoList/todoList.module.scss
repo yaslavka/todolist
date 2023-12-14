@@ -1,0 +1,33 @@
+
+.sectionTaskRow{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: grey;
+  max-width: 1500px;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.taskRow{
+  font-size: 15px;
+  font-weight: bold;
+  color: darkblue;
+  text-align: center;
+  max-width: 150px;
+  width: 100%;
+}
+.actionsButton{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  color: darkblue;
+  text-align: center;
+  max-width: 300px;
+  width: 100%;
+}
