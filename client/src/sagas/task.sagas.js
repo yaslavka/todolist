@@ -18,11 +18,12 @@ export function* taskInfo(action) {
 
 export function* taskAdd(action) {
     try {
+        const  data = {pages: localStorage.getItem('pages') || 1, count: 3}
         const response = yield call(api.taskAdd, action.payload)
         if (response) {
             yield put(actions.addTaskSuccess(response))
             toast.success(response.message)
-            const task = yield call(api.taskInfo)
+            const task = yield call(api.taskInfo, data)
             yield put(actions.taskInfoSuccess(task))
         }
     } catch (error) {
@@ -32,11 +33,12 @@ export function* taskAdd(action) {
 }
 export function* taskAuthAdd(action) {
     try {
+        const  data = {pages: localStorage.getItem('pages') || 1, count: 3}
         const response = yield call(api.taskAuthAdd, action.payload)
         if (response) {
             yield put(actions.addTaskSuccess(response))
             toast.success(response.message)
-            const task = yield call(api.taskInfo)
+            const task = yield call(api.taskInfo, data)
             yield put(actions.taskInfoSuccess(task))
         }
     } catch (error) {
@@ -47,15 +49,32 @@ export function* taskAuthAdd(action) {
 
 export function* taskStatus(action) {
     try {
+        const  data = {pages: localStorage.getItem('pages') || 1, count: 3}
         const response = yield call(api.taskStatus, action.payload)
         if (response) {
             yield put(actions.taskStatusSuccess(response))
             toast.success(response.message)
-            const task = yield call(api.taskInfo)
+            const task = yield call(api.taskInfo, data)
             yield put(actions.taskInfoSuccess(task))
         }
     } catch (error) {
         yield put(actions.taskStatusError(error.message))
+        toast.error(error.message)
+    }
+}
+
+export function* taskEdit(action) {
+    try {
+        const  data = {pages: localStorage.getItem('pages') || 1, count: 3}
+        const response = yield call(api.taskEdit, action.payload)
+        if (response) {
+            yield put(actions.taskEditSuccess(response))
+            toast.success(response.message)
+            const task = yield call(api.taskInfo, data)
+            yield put(actions.taskInfoSuccess(task))
+        }
+    } catch (error) {
+        yield put(actions.taskEditError(error.message))
         toast.error(error.message)
     }
 }
@@ -65,5 +84,6 @@ export default function* taskSaga() {
         takeEvery(ActionTypes.ADD_TASK_REQUEST, taskAdd),
         takeEvery(ActionTypes.ADD_TASK_AUTH_REQUEST, taskAuthAdd),
         takeEvery(ActionTypes.TASK_STATUS_REQUEST, taskStatus),
+        takeEvery(ActionTypes.TASK_EDIT_REQUEST, taskEdit),
     ])
 }

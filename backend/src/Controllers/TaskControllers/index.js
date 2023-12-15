@@ -77,9 +77,10 @@ class TaskControllers {
     }
     async taskEdit(req, res){
         const {task, id}=req.body
+        console.log(req.body)
         const tasks =await TaskModel.findOne({where:{id:id}})
         if (tasks){
-            await TaskModel.update({task:task}, {where: {id: task.id}})
+            await TaskModel.update({task:task}, {where: {id: tasks.id}})
             return res.status(200).json({message: 'Задача успешно Обновленна'})
         }else {
             return res.status(409).json({message: 'Ошибка Сервера'})

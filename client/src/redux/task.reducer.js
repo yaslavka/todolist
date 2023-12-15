@@ -5,17 +5,20 @@ const initialState = {
     taskAdd: null,
     taskAuthAdd: null,
     taskStatus: null,
+    taskEdit: null,
     loadings: {
         task: false,
         taskAdd: false,
         taskAuthAdd: false,
         taskStatus: false,
+        taskEdit: false,
     },
     errors: {
         task: null,
         taskAdd: null,
         taskAuthAdd: null,
         taskStatus: null,
+        taskEdit: null,
     },
 }
 const taskReducer = (state = initialState, action) =>{
@@ -114,6 +117,30 @@ const taskReducer = (state = initialState, action) =>{
                 ...state,
                 loadings: { ...state.loadings, taskStatus: false },
                 errors: { ...state.errors, taskStatus: action.payload },
+            }
+        }
+
+        case ActionTypes.TASK_EDIT_REQUEST: {
+            return {
+                ...state,
+                loadings: { ...state.loadings, taskEdit: true },
+                errors: { ...state.errors, taskEdit: null },
+            }
+        }
+        case ActionTypes.TASK_EDIT_SUCCESS: {
+            const taskEdit = action.payload
+            return {
+                ...state,
+                loadings: { ...state.loadings, taskEdit: false },
+                errors: { ...state.errors, taskEdit: null },
+                taskEdit,
+            }
+        }
+        case ActionTypes.TASK_EDIT_ERROR: {
+            return {
+                ...state,
+                loadings: { ...state.loadings, taskEdit: false },
+                errors: { ...state.errors, taskEdit: action.payload },
             }
         }
         default:

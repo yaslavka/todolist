@@ -56,3 +56,17 @@ export const taskStatusError = (error) => ({
     type: ActionTypes.TASK_STATUS_ERROR,
     payload: error,
 })
+
+export const taskEdit = (values) => ({
+    type: ActionTypes.TASK_EDIT_REQUEST,
+    payload: values,
+})
+export const taskEditSuccess = (values) => ({
+    type: ActionTypes.TASK_EDIT_SUCCESS,
+    payload: values,
+
+})
+export const taskEditError = (error) => ({
+    type: ActionTypes.TASK_EDIT_ERROR,
+    payload: error,
+})
