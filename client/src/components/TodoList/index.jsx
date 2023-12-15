@@ -39,7 +39,7 @@ function TodoList({list}) {
                         <textarea value={text} onChange={(e)=>setText(e.target.value)} placeholder={list.task}/>
                     </>
                 ):(
-                    <div className={styles.taskRow}>
+                    <div className={styles.taskRow} onClick={()=>setEditActive(true)}>
                         {list.task}
                     </div>
                 )}

@@ -4,6 +4,7 @@ import * as ActionTypes from '../constants/task.constants'
 import * as actions from '../actions/task.actions'
 import * as api from '../api/tak.api'
 
+export const  data = {pages: localStorage.getItem('pages') || 1, count: 3}
 export function* taskInfo(action) {
     try {
         const response = yield call(api.taskInfo, action.payload)
@@ -18,7 +19,6 @@ export function* taskInfo(action) {
 
 export function* taskAdd(action) {
     try {
-        const  data = {pages: localStorage.getItem('pages') || 1, count: 3}
         const response = yield call(api.taskAdd, action.payload)
         if (response) {
             yield put(actions.addTaskSuccess(response))
@@ -33,7 +33,6 @@ export function* taskAdd(action) {
 }
 export function* taskAuthAdd(action) {
     try {
-        const  data = {pages: localStorage.getItem('pages') || 1, count: 3}
         const response = yield call(api.taskAuthAdd, action.payload)
         if (response) {
             yield put(actions.addTaskSuccess(response))
@@ -49,7 +48,6 @@ export function* taskAuthAdd(action) {
 
 export function* taskStatus(action) {
     try {
-        const  data = {pages: localStorage.getItem('pages') || 1, count: 3}
         const response = yield call(api.taskStatus, action.payload)
         if (response) {
             yield put(actions.taskStatusSuccess(response))
@@ -65,7 +63,6 @@ export function* taskStatus(action) {
 
 export function* taskEdit(action) {
     try {
-        const  data = {pages: localStorage.getItem('pages') || 1, count: 3}
         const response = yield call(api.taskEdit, action.payload)
         if (response) {
             yield put(actions.taskEditSuccess(response))
