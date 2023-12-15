@@ -3,6 +3,7 @@ import styles from './main.module.scss'
 import {Button} from "reactstrap";
 import {useDispatch, useSelector} from "react-redux";
 import * as modalActions from '../../actions/globalUseState.actions'
+import * as taskActions from "../../actions/task.actions";
 import TodoList from "../../components/TodoList";
 import ModalSortName from "../../components/ModalSortName";
 import ModalAddTask from "../../components/ModalAddTask";
@@ -47,6 +48,10 @@ function RootPages() {
             dispatch(modalActions.modalSortStatus(false))
         }
     }, [dispatch, modalSortStatus])
+
+    const nextPages = (pages, count)=>{
+        dispatch(taskActions.taskInfo({pages: pages, count: count}))
+    }
     return (
         <>
             <main className={styles.main}>
@@ -95,9 +100,14 @@ function RootPages() {
                             </section>
                             <section className={styles.sectionTask}>
                                 {task.task.map((item, index) => (
-                                    <TodoList list={item} key={index}/>
+                                    <>
+                                        <TodoList list={item} key={index}/>
+                                    </>
                                 ))}
                             </section>
+                            {Array.from({length: task.totalPages}, (_, index) =>(
+                                <button key={index +1} onClick={()=>{nextPages(index + 1, 3)}} className={styles.pagesButton}>{index + 1}</button>
+                            ))}
                         </div>
                     </div>
                 )}

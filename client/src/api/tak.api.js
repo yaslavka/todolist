@@ -1,6 +1,6 @@
 import {baseInstance} from "./index";
 
-export const taskInfo = () => baseInstance.get('/task')
+export const taskInfo = (data) => baseInstance.get(`/task?pages=${data?.pages}&count=${data?.count}`)
 
 export const taskAdd = (task) => baseInstance.post(`/task_add`, task)
 

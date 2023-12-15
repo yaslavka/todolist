@@ -4,9 +4,9 @@ import * as ActionTypes from '../constants/task.constants'
 import * as actions from '../actions/task.actions'
 import * as api from '../api/tak.api'
 
-export function* taskInfo() {
+export function* taskInfo(action) {
     try {
-        const response = yield call(api.taskInfo)
+        const response = yield call(api.taskInfo, action.payload)
         if (response) {
             yield put(actions.taskInfoSuccess(response))
         }
@@ -40,7 +40,22 @@ export function* taskAuthAdd(action) {
             yield put(actions.taskInfoSuccess(task))
         }
     } catch (error) {
-        yield put(actions.addTaskError(error.message))
+        yield put(actions.addTaskAthError(error.message))
+        toast.error(error.message)
+    }
+}
+
+export function* taskStatus(action) {
+    try {
+        const response = yield call(api.taskStatus, action.payload)
+        if (response) {
+            yield put(actions.taskStatusSuccess(response))
+            toast.success(response.message)
+            const task = yield call(api.taskInfo)
+            yield put(actions.taskInfoSuccess(task))
+        }
+    } catch (error) {
+        yield put(actions.taskStatusError(error.message))
         toast.error(error.message)
     }
 }
@@ -49,5 +64,6 @@ export default function* taskSaga() {
         takeEvery(ActionTypes.TASK_INFO_REQUEST, taskInfo),
         takeEvery(ActionTypes.ADD_TASK_REQUEST, taskAdd),
         takeEvery(ActionTypes.ADD_TASK_AUTH_REQUEST, taskAuthAdd),
+        takeEvery(ActionTypes.TASK_STATUS_REQUEST, taskStatus),
     ])
 }

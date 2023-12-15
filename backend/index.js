@@ -34,7 +34,7 @@ app.post('/api/register', UserController.registration)
 app.post('/api/login_admin', UserController.loginAdmin)
 app.post('/api/task_add', TaskControllers.addTask)
 app.post('/api/task_auth_add', TaskControllers.addTaskAuth)
-app.post('/api/task_status', TaskControllers.addTaskAuth)
+app.post('/api/task_status', TaskControllers.taskStatus)
 app.post('/api/task_edit', TaskControllers.taskEdit)
 
 const start = async () => {

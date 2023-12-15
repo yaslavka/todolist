@@ -4,12 +4,18 @@ const {TaskModel} = require("../../Models/TaskModel");
 
 class TaskControllers {
     async task(req, res){
-        let task =await TaskModel.findAll({include:[{model: UserModels, as: 'user'}]})
+        const {pages, count}=req.query
+        const limit = parseInt(count)
+        const page = parseInt(pages) || 1; // Получение номера страницы из запроса
+        const offset = (page - 1) * limit;
+        let task =await TaskModel.findAll({limit:limit, offset:offset, include:[{model: UserModels, as: 'user'}]})
         if (!task.length){
             return res.status(409).json({message: 'Задачи отсутствуют'})
         }else {
+            const totalCount = await TaskModel.count();
+            const totalPages = Math.ceil(totalCount / limit);
             const users = await UserModels.findAll({where:{id: task.map(tasks=>tasks.userId)}})
-            return res.status(200).json({task, users})
+            return res.status(200).json({task, totalPages, users})
         }
     }
     async addTask(req, res){
@@ -70,13 +76,13 @@ class TaskControllers {
         }
     }
     async taskEdit(req, res){
-        const {id,task}=req.body
+        const {task, id}=req.body
         const tasks =await TaskModel.findOne({where:{id:id}})
         if (tasks){
             await TaskModel.update({task:task}, {where: {id: task.id}})
             return res.status(200).json({message: 'Задача успешно Обновленна'})
         }else {
-            return res.status(409).json({message: 'Ошибка данных'})
+            return res.status(409).json({message: 'Ошибка Сервера'})
         }
     }
 }

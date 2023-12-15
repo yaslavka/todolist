@@ -4,15 +4,18 @@ const initialState = {
     task: null,
     taskAdd: null,
     taskAuthAdd: null,
+    taskStatus: null,
     loadings: {
         task: false,
         taskAdd: false,
         taskAuthAdd: false,
+        taskStatus: false,
     },
     errors: {
         task: null,
         taskAdd: null,
         taskAuthAdd: null,
+        taskStatus: null,
     },
 }
 const taskReducer = (state = initialState, action) =>{
@@ -87,6 +90,30 @@ const taskReducer = (state = initialState, action) =>{
                 ...state,
                 loadings: { ...state.loadings, taskAuthAdd: false },
                 errors: { ...state.errors, taskAuthAdd: action.payload },
+            }
+        }
+
+        case ActionTypes.TASK_STATUS_REQUEST: {
+            return {
+                ...state,
+                loadings: { ...state.loadings, taskStatus: true },
+                errors: { ...state.errors, taskStatus: null },
+            }
+        }
+        case ActionTypes.TASK_STATUS_SUCCESS: {
+            const taskStatus = action.payload
+            return {
+                ...state,
+                loadings: { ...state.loadings, taskStatus: false },
+                errors: { ...state.errors, taskStatus: null },
+                taskStatus,
+            }
+        }
+        case ActionTypes.TASK_STATUS_ERROR: {
+            return {
+                ...state,
+                loadings: { ...state.loadings, taskStatus: false },
+                errors: { ...state.errors, taskStatus: action.payload },
             }
         }
         default:
