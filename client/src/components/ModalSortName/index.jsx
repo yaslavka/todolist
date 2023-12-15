@@ -1,9 +1,16 @@
-import React from "react";
+import React, {useState} from "react";
 import {Modal} from "react-bootstrap";
 import styles from './modalSortName.module.scss'
 import {Button, Input} from "reactstrap";
+import UsersList from "../UsersList";
 
-function ModalSortName({onClick, modalSortName}) {
+function ModalSortName({onClick, modalSortName, nameUsers, setName}) {
+    const [searchUser, setSearchUser] = useState('');
+    const filteredUsers = nameUsers
+        ? nameUsers.filter((user) =>
+            user.foolName.toLowerCase().includes(searchUser.toLowerCase())
+        )
+        : [];
     return (
         <>
             <Modal show={modalSortName} onHide={onClick}>
@@ -13,7 +20,10 @@ function ModalSortName({onClick, modalSortName}) {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Input className={styles.input}/>
+                    <Input className={styles.input} value={searchUser} onChange={(e)=>setSearchUser(e.target.value)}/>
+                    {filteredUsers && filteredUsers.map((user, index)=>(
+                        <UsersList user={user} key={index} setName={setName}/>
+                    ))}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button color={'primary'} onClick={onClick}>

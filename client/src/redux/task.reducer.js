@@ -6,12 +6,14 @@ const initialState = {
     taskAuthAdd: null,
     taskStatus: null,
     taskEdit: null,
+    taskFilter:null,
     loadings: {
         task: false,
         taskAdd: false,
         taskAuthAdd: false,
         taskStatus: false,
         taskEdit: false,
+        taskFilter:false,
     },
     errors: {
         task: null,
@@ -19,6 +21,7 @@ const initialState = {
         taskAuthAdd: null,
         taskStatus: null,
         taskEdit: null,
+        taskFilter:null,
     },
 }
 const taskReducer = (state = initialState, action) =>{
@@ -141,6 +144,30 @@ const taskReducer = (state = initialState, action) =>{
                 ...state,
                 loadings: { ...state.loadings, taskEdit: false },
                 errors: { ...state.errors, taskEdit: action.payload },
+            }
+        }
+
+        case ActionTypes.TASK_FILTER_REQUEST: {
+            return {
+                ...state,
+                loadings: { ...state.loadings, taskFilter: true },
+                errors: { ...state.errors, taskFilter: null },
+            }
+        }
+        case ActionTypes.TASK_FILTER_SUCCESS: {
+            const taskFilter = action.payload
+            return {
+                ...state,
+                loadings: { ...state.loadings, taskFilter: false },
+                errors: { ...state.errors, taskFilter: null },
+                taskFilter,
+            }
+        }
+        case ActionTypes.TASK_FILTER_ERROR: {
+            return {
+                ...state,
+                loadings: { ...state.loadings, taskFilter: false },
+                errors: { ...state.errors, taskFilter: action.payload },
             }
         }
         default:

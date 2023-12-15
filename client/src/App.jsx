@@ -1,7 +1,6 @@
 import './App.css';
 import {useDispatch, useSelector} from "react-redux";
 import * as actionUserInfo from './actions/app.actions'
-import * as actionTask from './actions/task.actions'
 import {useEffect} from "react";
 import PublicRoutes from "./roures/PublicRoutes";
 import PrivateRoutes from "./roures/PrivateRoutes";
@@ -15,9 +14,6 @@ function App() {
     }
   }, [dispatch, isAuthenticated])
 
-  useEffect(()=>{
-    dispatch(actionTask.taskInfo({pages: Number(localStorage.getItem('pages')) || 1, count: 3}))
-  },[dispatch])
 
   if (!isAuthenticated){
     return <PublicRoutes/>

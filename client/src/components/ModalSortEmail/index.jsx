@@ -1,7 +1,7 @@
 import React from "react";
 
 
-function ModalSortEmail() {
+function ModalSortEmail({setEmail, emailUsers, modalSortEmail, onClick}) {
     return (
         <>
 

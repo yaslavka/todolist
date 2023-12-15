@@ -75,6 +75,18 @@ export function* taskEdit(action) {
         toast.error(error.message)
     }
 }
+export function* taskFilter(action) {
+    try {
+        const response = yield call(api.taskFilter, action.payload)
+        if (response) {
+            yield put(actions.taskFilterSuccess(response))
+            toast.success(response.message)
+        }
+    } catch (error) {
+        yield put(actions.taskFilterError(error.message))
+        toast.error(error.message)
+    }
+}
 export default function* taskSaga() {
     yield all([
         takeEvery(ActionTypes.TASK_INFO_REQUEST, taskInfo),
@@ -82,5 +94,6 @@ export default function* taskSaga() {
         takeEvery(ActionTypes.ADD_TASK_AUTH_REQUEST, taskAuthAdd),
         takeEvery(ActionTypes.TASK_STATUS_REQUEST, taskStatus),
         takeEvery(ActionTypes.TASK_EDIT_REQUEST, taskEdit),
+        takeEvery(ActionTypes.TASK_FILTER_REQUEST, taskFilter),
     ])
 }

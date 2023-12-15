@@ -15,6 +15,20 @@ export const taskInfoError = (error) => ({
     payload: error,
 })
 
+export const taskPages = (values) => ({
+    type: ActionTypes.TASK_FILTER_REQUEST,
+    payload: values,
+})
+export const taskUserFoolName = (values) => ({
+    type: ActionTypes.TASK_FILTER_SUCCESS,
+    payload: values,
+
+})
+export const taskUserEmail = (error) => ({
+    type: ActionTypes.TASK_FILTER_ERROR,
+    payload: error,
+})
+
 export const addTaskAth = (values) => ({
     type: ActionTypes.ADD_TASK_AUTH_REQUEST,
     payload: values,
@@ -68,5 +82,19 @@ export const taskEditSuccess = (values) => ({
 })
 export const taskEditError = (error) => ({
     type: ActionTypes.TASK_EDIT_ERROR,
+    payload: error,
+})
+
+export const taskFilter = (values) => ({
+    type: ActionTypes.TASK_FILTER_REQUEST,
+    payload: values,
+})
+export const taskFilterSuccess = (values) => ({
+    type: ActionTypes.TASK_FILTER_SUCCESS,
+    payload: values,
+
+})
+export const taskFilterError = (error) => ({
+    type: ActionTypes.TASK_FILTER_ERROR,
     payload: error,
 })

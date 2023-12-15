@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import styles from './main.module.scss'
 import {Button} from "reactstrap";
 import {useDispatch, useSelector} from "react-redux";
@@ -8,15 +8,23 @@ import TodoList from "../../components/TodoList";
 import ModalSortName from "../../components/ModalSortName";
 import ModalAddTask from "../../components/ModalAddTask";
 import ModalSortEmail from "../../components/ModalSortEmail";
-import ModalSortStatus from "../../components/ModalSortStatus";
+import * as actionTask from "../../actions/task.actions";
 
 function RootPages() {
     const dispatch = useDispatch()
     const task = useSelector((state) => state.task.task)
+    const pages = null
     const modalSortName = useSelector((state) => state.useState.modalSortNameVisible)
     const modalSortEmail = useSelector((state) => state.useState.modalSortEmailVisible)
     const modalSortStatus = useSelector((state) => state.useState.modalSortStatusVisible)
     const modalSortAdd = useSelector((state) => state.useState.modalSortAddVisible)
+    const [name, setName]=useState('')
+    const [email, setEmail]=useState('')
+    const [status, setStatus]=useState()
+
+    useEffect(()=>{
+        dispatch(actionTask.taskInfo({pages: pages ? pages: localStorage.getItem('pages') ? localStorage.getItem('pages'): 1, count: 3 , foolName:name, email:email, status:status}))
+    },[dispatch])
 
     const modalName = useCallback(() => {
         if (modalSortName === false) {
@@ -49,14 +57,25 @@ function RootPages() {
         }
     }, [dispatch, modalSortStatus])
 
-    const nextPages = (pages, count)=>{
-        dispatch(taskActions.taskInfo({pages: pages, count: count}))
+    const nextPages = (pages)=>{
+        dispatch(actionTask.taskInfo({pages: pages ? pages: localStorage.getItem('pages') ? localStorage.getItem('pages'): 1, count: 3 , foolName:name, email:email, status:status}))
         localStorage.setItem('pages', pages)
     }
 
     const titleMap = [
         'Номер п/п', 'статус', 'Задача', 'Email', 'Автор', 'Телефон', 'Опции'
     ];
+
+
+    const changeStatus =()=>{
+        if (status === undefined){
+            setStatus(false)
+        }else if (status === false){
+            setStatus(true)
+        }else {
+            setStatus(false)
+        }
+    }
 
     return (
         <>
@@ -72,7 +91,7 @@ function RootPages() {
                         <Button color={'primary'} className={styles.sortButton}>
                             По Email
                         </Button>
-                        <Button color={'primary'} className={styles.sortButton} onClick={modalStatusSort}>
+                        <Button color={'primary'} className={styles.sortButton} onClick={changeStatus} >
                             По Статусу
                         </Button>
                     </section>
@@ -100,16 +119,13 @@ function RootPages() {
                     </section>
                 )}
                 {modalSortName &&
-                <ModalSortName modalSortName={modalSortName} onClick={modalName} nameUsers={task && task.users}/>
+                <ModalSortName modalSortName={modalSortName} onClick={modalName} nameUsers={task && task.users} setName={setName}/>
                 }
                 {modalSortAdd &&
                 <ModalAddTask onClick={modalAddTask} modalSortAdd={modalSortAdd}/>
                 }
                 {modalSortEmail &&
-                <ModalSortEmail onClick={modalEmailSort} modalSortEmail={modalSortEmail} emailUsers={task && task.users}/>
-                }
-                {modalSortStatus &&
-                <ModalSortStatus onClick={modalStatusSort} modalSortStatus={modalSortStatus}/>
+                <ModalSortEmail onClick={modalEmailSort} modalSortEmail={modalSortEmail} emailUsers={task && task.users} setEmail={setEmail}/>
                 }
             </main>
         </>

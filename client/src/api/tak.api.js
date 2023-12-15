@@ -10,3 +10,5 @@ export const taskStatus = (task) => baseInstance.post(`/task_status`, task)
 
 export const taskEdit = (task) => baseInstance.post(`/task_edit`, task)
 
+export const taskFilter = (data) => baseInstance.get(`/task_filter?pages=${data?.pages}&count=${data?.count}&foolName=${data.foolName}&email=${data.email}&status=${data.status}`)
+

@@ -36,6 +36,7 @@ app.post('/api/task_add', TaskControllers.addTask)
 app.post('/api/task_auth_add', TaskControllers.addTaskAuth)
 app.post('/api/task_status', TaskControllers.taskStatus)
 app.post('/api/task_edit', TaskControllers.taskEdit)
+app.get('/api/task_filter', TaskControllers.taskFilter)
 
 const start = async () => {
   try {

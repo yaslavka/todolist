@@ -24,6 +24,9 @@
   &:last-child {
     max-width: 300px;
   }
+  & textarea {
+    height: 30px;
+  }
 }
 .actionsButton{
   display: flex;
