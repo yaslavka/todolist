@@ -16,7 +16,7 @@ function App() {
   }, [dispatch, isAuthenticated])
 
   useEffect(()=>{
-    dispatch(actionTask.taskInfo({pages: 1, count: 3}))
+    dispatch(actionTask.taskInfo({pages: Number(localStorage.getItem('pages')) || 1, count: 3}))
   },[dispatch])
 
   if (!isAuthenticated){

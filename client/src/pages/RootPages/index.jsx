@@ -51,6 +51,7 @@ function RootPages() {
 
     const nextPages = (pages, count)=>{
         dispatch(taskActions.taskInfo({pages: pages, count: count}))
+        localStorage.setItem('pages', pages)
     }
     return (
         <>
@@ -100,9 +101,7 @@ function RootPages() {
                             </section>
                             <section className={styles.sectionTask}>
                                 {task.task.map((item, index) => (
-                                    <>
-                                        <TodoList list={item} key={index}/>
-                                    </>
+                                    <TodoList list={item} key={index}/>
                                 ))}
                             </section>
                             {Array.from({length: task.totalPages}, (_, index) =>(
