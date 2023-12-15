@@ -53,6 +53,7 @@
   padding: 10px;
 }
 .todoListContainer{
+  overflow: auto;
   margin-bottom: 20px;
   text-align: center;
 }
@@ -68,14 +69,20 @@
   gap: 8px;
   max-width: 1500px;
   margin: 0 auto;
-  @media (max-width: 400px) {
-    display: none;
+  @media (max-width: 1440px) {
+    max-width: initial;
+    width: 1390px;
   }
 }
 .ul {
   @extend %grid;
   margin-bottom: 0;
-  border: 1px solid grey;
+  border-top: 1px solid grey;
+  border-right: 1px solid grey;
+  border-left: 1px solid grey;
+  @media (max-width: 1440px) {
+    grid-template-columns: 100px 200px 200px 200px 200px 200px 300px;
+  }
 }
 .titleRow{
   font-size: 15px;
@@ -87,6 +94,9 @@
   width: 100%;
   &:last-child {
     max-width: 300px;
+    @media (max-width: 1440px) {
+      border-right: none;
+    }
   }
 }
 .options{
