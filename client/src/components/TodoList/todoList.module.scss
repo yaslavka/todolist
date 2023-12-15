@@ -16,6 +16,24 @@
     width: 1390px;
   }
 }
+
+.sectionTaskRowAdmin{
+  display: grid;
+  grid-template-columns: 100px 1fr 1fr 1fr 1fr 1fr;
+  width: 100%;
+  align-items: center;
+  padding-left: 0;
+  border: 1px solid grey;
+  border-bottom: none;
+  margin: 0 auto;
+  &:last-child {
+    border-bottom: 1px solid grey;
+  }
+  @media (max-width: 1440px) {
+    grid-template-columns: 100px 200px 200px 200px 200px 200px;
+    width: 1099px;
+  }
+}
 .taskRow{
   display: flex;
   justify-content: center;

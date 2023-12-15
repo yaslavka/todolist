@@ -3,7 +3,6 @@ import styles from './main.module.scss'
 import {Button} from "reactstrap";
 import {useDispatch, useSelector} from "react-redux";
 import * as modalActions from '../../actions/globalUseState.actions'
-import * as taskActions from "../../actions/task.actions";
 import TodoList from "../../components/TodoList";
 import ModalSortName from "../../components/ModalSortName";
 import ModalAddTask from "../../components/ModalAddTask";
@@ -12,6 +11,7 @@ import * as actionTask from "../../actions/task.actions";
 
 function RootPages() {
     const dispatch = useDispatch()
+    const userInfo = useSelector((state) => state.app.user)
     const task = useSelector((state) => state.task.task)
     const pages = null
     const modalSortName = useSelector((state) => state.useState.modalSortNameVisible)
@@ -63,6 +63,9 @@ function RootPages() {
     }
 
     const titleMap = [
+        'Номер п/п', 'статус', 'Задача', 'Email', 'Автор', 'Телефон'
+    ];
+    const titleAdmin = [
         'Номер п/п', 'статус', 'Задача', 'Email', 'Автор', 'Телефон', 'Опции'
     ];
 
@@ -101,16 +104,24 @@ function RootPages() {
                 </aside>
                 {task && (
                     <section className={styles.todoListContainer}>
-                         <article className={styles.sectionWrapper}>
-                             <ul className={styles.ul}>
-                                {titleMap.map((item, index) => (
-                                    <li className={styles.titleRow} key={index}>{item}</li>
-                                 ))}
-                             </ul>
+                         <article className={userInfo?.isAdmin ? styles.sectionWrapperAdmin : styles.sectionWrapper}>
+                             {userInfo?.isAdmin ? (
+                                 <ul className={styles.ulAdmin}>
+                                     {titleAdmin.map((item, index) => (
+                                         <li className={styles.titleRow} key={index}>{item}</li>
+                                     ))}
+                                 </ul>
+                             ):(
+                                 <ul className={styles.ul}>
+                                     {titleMap.map((item, index) => (
+                                         <li className={styles.titleRow} key={index}>{item}</li>
+                                     ))}
+                                 </ul>
+                             )}
                          </article>
                          <article className={styles.sectionTask}>
                              {task.task.map((item, index) => (
-                                 <TodoList list={item} key={index}/>
+                                 <TodoList list={item} key={index} userInfo={userInfo && userInfo}/>
                              ))}
                          </article>
                          {Array.from({length: task.totalPages}, (_, index) =>(

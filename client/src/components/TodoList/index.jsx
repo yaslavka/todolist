@@ -4,7 +4,7 @@ import {Button} from "reactstrap";
 import {useDispatch} from "react-redux";
 import * as taskActions from '../../actions/task.actions'
 
-function TodoList({list}) {
+function TodoList({list, userInfo}) {
     const dispatch = useDispatch()
     const [editActive, setEditActive]=useState(false)
     const [text, setText] = useState('')
@@ -16,7 +16,7 @@ function TodoList({list}) {
         setEditActive(false)
     }
     return (
-        <ul className={styles.sectionTaskRow}>
+        <ul className={userInfo?.isAdmin ? styles.sectionTaskRow: styles.sectionTaskRowAdmin}>
             <li className={styles.taskRow}>№ {list.id}</li>
             {list.status === true ? (
                 <li className={styles.taskRow}>
@@ -33,13 +33,21 @@ function TodoList({list}) {
                     <p>не выполнен</p>
                 </li>
             )}
-            {editActive ? (
-                <li className={styles.taskRow}>
-                    <textarea value={text} onChange={(e)=>setText(e.target.value)} placeholder={list.task}/>
-                </li>
+            {userInfo?.isAdmin ? (
+                <>
+                    {editActive ? (
+                        <li className={styles.taskRow}>
+                            <textarea value={text} onChange={(e)=>setText(e.target.value)} placeholder={list.task}/>
+                        </li>
 
+                    ):(
+                        <li className={styles.taskRow} onClick={()=>setEditActive(true)}>
+                            {list.task}
+                        </li>
+                    )}
+                </>
             ):(
-                <li className={styles.taskRow} onClick={()=>setEditActive(true)}>
+                <li className={styles.taskRow}>
                     {list.task}
                 </li>
             )}
@@ -52,18 +60,20 @@ function TodoList({list}) {
             <li className={styles.taskRow}>
                 {list.user?.phone}
             </li>
-            <li className={styles.actionsButton}>
-                <svg width={25} height={25} fill={'#00008B'} role={"button"} onClick={()=>setEditActive(!editActive)}>
-                    <path d="M22 24H2v-4h20v4zM13.06 5.19l3.75 3.75L7.75 18H4v-3.75l9.06-9.06zm4.82 2.68-3.75-3.75 1.83-1.83c.39-.39 1.02-.39 1.41 0l2.34 2.34c.39.39.39 1.02 0 1.41l-1.83 1.83z"/>
-                </svg>
-                {editActive ? (
-                    <Button color={'success'} type='submit' onClick={()=>{taskEdit(list.id)}}>
-                        Сохранить
-                    </Button>
-                ):(
-                    <Button onClick={()=>{taskStatusChange(list.id)}} type={'submit'} disabled={list.status} color={list.status === true ? 'success': 'primary'}>{list.status === true ? 'Выполненно':'Выполнить'}</Button>
-                )}
-            </li>
+            {userInfo?.isAdmin &&  (
+                <li className={styles.actionsButton}>
+                    <svg width={25} height={25} fill={'#00008B'} role={"button"} onClick={()=>setEditActive(!editActive)}>
+                        <path d="M22 24H2v-4h20v4zM13.06 5.19l3.75 3.75L7.75 18H4v-3.75l9.06-9.06zm4.82 2.68-3.75-3.75 1.83-1.83c.39-.39 1.02-.39 1.41 0l2.34 2.34c.39.39.39 1.02 0 1.41l-1.83 1.83z"/>
+                    </svg>
+                    {editActive ? (
+                        <Button color={'success'} type='submit' onClick={()=>{taskEdit(list.id)}}>
+                            Сохранить
+                        </Button>
+                    ):(
+                        <Button onClick={()=>{taskStatusChange(list.id)}} type={'submit'} disabled={list.status} color={list.status === true ? 'success': 'primary'}>{list.status === true ? 'Выполненно':'Выполнить'}</Button>
+                    )}
+                </li>
+            )}
         </ul>
     )
 }
