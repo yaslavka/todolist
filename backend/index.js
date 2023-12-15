@@ -11,12 +11,12 @@ const TaskControllers = require('./src/Controllers/TaskControllers')
 const UserController = require('./src/Controllers/UserControllers')
 
 const storage = multer.diskStorage({
-    destination(req, file, callback) {
-        callback(null, './files/images');
-    },
-    filename(req, file, callback) {
-        callback(null, `${file.fieldname}_${Date.now()}_${file.originalname}`);
-    },
+  destination(req, file, callback) {
+    callback(null, './files/images');
+  },
+  filename(req, file, callback) {
+    callback(null, `${file.fieldname}_${Date.now()}_${file.originalname}`);
+  },
 });
 const upload = multer({ storage });
 
@@ -38,12 +38,12 @@ app.post('/api/task_status', TaskControllers.taskStatus)
 app.post('/api/task_edit', TaskControllers.taskEdit)
 
 const start = async () => {
-    try {
-        await sequelize.authenticate();
-        await sequelize.sync();
-        server.listen(80, () => console.log(`server started on port 80`));
-    }catch (error){
-        console.log(error);
-    }
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync();
+    server.listen(80, () => console.log(`server started on port 80`));
+  }catch (error){
+    console.log(error);
+  }
 }
 start().then(r=>r);

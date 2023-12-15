@@ -6,7 +6,7 @@ class TaskControllers {
     async task(req, res){
         const {pages, count}=req.query
         const limit = parseInt(count)
-        const page = parseInt(pages) || 1; // Получение номера страницы из запроса
+        const page = parseInt(pages) || 1;
         const offset = (page - 1) * limit;
         let task =await TaskModel.findAll({limit:limit, offset:offset, include:[{model: UserModels, as: 'user'}]})
         if (!task.length){

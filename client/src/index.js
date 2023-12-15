@@ -7,7 +7,7 @@ import configureStore from "./config/store";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'react-toastify/dist/ReactToastify.css'
-import './index.css';
+import './index.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 export const store = configureStore()
 const root = ReactDOM.createRoot(document.getElementById('root'));

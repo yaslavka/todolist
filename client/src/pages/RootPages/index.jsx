@@ -53,10 +53,15 @@ function RootPages() {
         dispatch(taskActions.taskInfo({pages: pages, count: count}))
         localStorage.setItem('pages', pages)
     }
+
+    const titleMap = [
+        'Номер п/п', 'статус', 'Задача', 'Email', 'Автор', 'Телефон', 'Опции'
+    ];
+
     return (
         <>
             <main className={styles.main}>
-                <div className={styles.sectionButton}>
+                <aside className={styles.sectionButton}>
                     <section className={styles.section}>
                         <div className={styles.sortText}>
                             Сортировать:
@@ -74,41 +79,25 @@ function RootPages() {
                     <Button color={'primary'} className={styles.sortButton} onClick={modalAddTask}>
                         Добавить задачу
                     </Button>
-                </div>
+                </aside>
                 {task && (
-                    <div className={styles.todoListContainer}>
-
-                        <div className={styles.todoListWrapper}>
-                            <section className={styles.sectionWrapper}>
-                                <div className={styles.titleRow}>
-                                    статус
-                                </div>
-                                <div className={styles.titleRow}>
-                                    Задача
-                                </div>
-                                <div className={styles.titleRow}>
-                                    Email
-                                </div>
-                                <div className={styles.titleRow}>
-                                    Автор
-                                </div>
-                                <div className={styles.titleRow}>
-                                    Телефон
-                                </div>
-                                <div className={styles.options}>
-                                    Опции
-                                </div>
-                            </section>
-                            <section className={styles.sectionTask}>
-                                {task.task.map((item, index) => (
-                                    <TodoList list={item} key={index}/>
-                                ))}
-                            </section>
-                            {Array.from({length: task.totalPages}, (_, index) =>(
-                                <button key={index +1} onClick={()=>{nextPages(index + 1, 3)}} className={styles.pagesButton}>{index + 1}</button>
-                            ))}
-                        </div>
-                    </div>
+                    <section className={styles.todoListContainer}>
+                         <article className={styles.sectionWrapper}>
+                             <ul className={styles.ul}>
+                                {titleMap.map((item, index) => (
+                                    <li className={styles.titleRow} key={index}>{item}</li>
+                                 ))}
+                             </ul>
+                         </article>
+                         <article className={styles.sectionTask}>
+                             {task.task.map((item, index) => (
+                                 <TodoList list={item} key={index}/>
+                             ))}
+                         </article>
+                         {Array.from({length: task.totalPages}, (_, index) =>(
+                             <button key={index +1} onClick={()=>{nextPages(index + 1, 3)}} className={styles.pagesButton}>{index + 1}</button>
+                         ))}
+                    </section>
                 )}
                 {modalSortName &&
                 <ModalSortName modalSortName={modalSortName} onClick={modalName} nameUsers={task && task.users}/>
