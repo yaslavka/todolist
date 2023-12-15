@@ -24,9 +24,9 @@ export const taskUserFoolName = (values) => ({
     payload: values,
 
 })
-export const taskUserEmail = (error) => ({
+export const taskUserEmail = (value) => ({
     type: ActionTypes.TASK_USER_EMAIL,
-    payload: error,
+    payload: value,
 })
 
 export const status = (error) => ({

@@ -5,19 +5,96 @@ const {TaskModel} = require("../../Models/TaskModel");
 
 class TaskControllers {
     async task(req, res){
-        const {pages, count}=req.query
+        const {pages, count, status, foolName, email}=req.query
+        let taskStatus
+        if (status === 'undefined'){
+            taskStatus = undefined
+        }else if (status === 'true'){
+            taskStatus = true
+        }else if (status === 'false'){
+            taskStatus = false
+        }
         const limit = parseInt(count)
         const page = parseInt(pages) || 1;
         const offset = (page - 1) * limit;
-        let task =await TaskModel.findAll({limit:limit, offset:offset, include:[{model: UserModels, as: 'user'}]})
-        if (!task.length){
-            return res.status(409).json({message: 'Задачи отсутствуют'})
-        }else {
-            let taskUser =await TaskModel.findAll()
-            const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
-            const totalCount = await TaskModel.count();
-            const totalPages = Math.ceil(totalCount / limit);
-            return res.status(200).json({task, totalPages, users})
+        if (foolName === 'null' && email === 'null' && taskStatus === undefined){
+            let allTask =await TaskModel.findAll({limit:limit, offset:offset, include:[{model: UserModels, as: 'user'}]})
+            if (!allTask.length){
+                return res.status(409).json({message: 'Фильткр сброшен'})
+            }else {
+                let taskUser =await TaskModel.findAll()
+                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
+                const totalCount = await TaskModel.count();
+                const totalPages = Math.ceil(totalCount / limit);
+                return res.status(200).json({task:allTask, totalPages, users})
+            }
+        }else if(taskStatus !== undefined && foolName !== 'null' && email !== 'null'){
+            let taskFilter = await TaskModel.findAll({limit:limit, offset:offset, where:{[Op.or]:[{status: taskStatus}]}, include:[{model: UserModels, as: 'user', where:{[Op.or]: [{ foolName: foolName }, { email: email }]}}]})
+            if (!taskFilter.length){
+                return res.status(409).json({message: ''})
+            }else {
+                let taskUser =await TaskModel.findAll()
+                const totalCount = await TaskModel.count();
+                const totalPages = Math.ceil(totalCount / limit);
+                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
+                return res.status(200).json({task:taskFilter, totalPages, users})
+            }
+        }else if (taskStatus !== undefined && foolName === 'null' && email === 'null'){
+            let status =await TaskModel.findAll({limit:limit, offset:offset, where:{status:taskStatus}, include:[{model: UserModels, as: 'user'}]})
+            if (!status.length){
+                return res.status(409).json({message: 'Задачи Ненайдены'})
+            }else {
+                let taskUser =await TaskModel.findAll()
+                const totalCount = await TaskModel.count();
+                const totalPages = Math.ceil(totalCount / limit);
+                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
+                return res.status(200).json({task:status, totalPages, users})
+            }
+        }else if (foolName !== 'null' && email === 'null' && taskStatus !== undefined){
+            let taskFoolName =await TaskModel.findAll({limit:limit, offset:offset, where:{status:taskStatus}, include:[{model: UserModels, as: 'user', where: {foolName:foolName}}]})
+            if (!taskFoolName.length){
+                return res.status(409).json({message: 'Задачи с таким пользователем не найдены'})
+            }else {
+                let taskUser =await TaskModel.findAll()
+                const totalCount = await TaskModel.count();
+                const totalPages = Math.ceil(totalCount / limit);
+                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
+                return res.status(200).json({task:taskFoolName, totalPages, users})
+            }
+        }else if (foolName === 'null' && email !== 'null'&& taskStatus !== undefined){
+            let taskEmail=await TaskModel.findAll({limit:limit, offset:offset, where:{status:taskStatus}, include:[{model: UserModels, as: 'user', where: {emil:email}}]})
+            if (!taskEmail.length){
+                return res.status(409).json({message: 'Задачи с таким Email не найдены'})
+            }else {
+                let taskUser =await TaskModel.findAll()
+                const totalCount = await TaskModel.count();
+                const totalPages = Math.ceil(totalCount / limit);
+                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
+                return res.status(200).json({task:taskEmail, totalPages, users})
+            }
+
+        }else if (taskStatus === undefined && foolName !== 'null' && email === 'null'){
+            let name =await TaskModel.findAll({limit:limit, offset:offset, include:[{model: UserModels, as: 'user', where: {foolName:foolName}}]})
+            if (!name.length){
+                return res.status(409).json({message: 'Такой пользователь не найден'})
+            }else {
+                let taskUser =await TaskModel.findAll()
+                const totalCount = await TaskModel.count();
+                const totalPages = Math.ceil(totalCount / limit);
+                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
+                return res.status(200).json({task:name, totalPages, users})
+            }
+        }else if (taskStatus === undefined && foolName === 'null' && email !== 'null'){
+            let taskEmail=await TaskModel.findAll({limit:limit, offset:offset, include:[{model: UserModels, as: 'user', where: {emil:email}}]})
+            if (!taskEmail.length){
+                return res.status(409).json({message: 'Такой Email Не найден'})
+            }else {
+                let taskUser =await TaskModel.findAll()
+                const totalCount = await TaskModel.count();
+                const totalPages = Math.ceil(totalCount / limit);
+                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
+                return res.status(200).json({task:taskEmail, totalPages, users})
+            }
         }
     }
     async addTask(req, res){
@@ -85,91 +162,6 @@ class TaskControllers {
             return res.status(200).json({message: 'Задача успешно Обновленна'})
         }else {
             return res.status(409).json({message: 'Ошибка Сервера'})
-        }
-    }
-    async taskFilter(req, res){
-        const {pages, count, status, foolName, email}=req.query
-        const page = parseInt(pages) || 1;
-        const limit = parseInt(count)
-        const offset = (page - 1) * limit;
-        if (!foolName && !email && status === undefined){
-            let allTask =await TaskModel.findAll({limit:limit, offset:offset, include:[{model: UserModels, as: 'user'}]})
-            if (!allTask.length){
-                return res.status(409).json({message: 'Фильткр сброшен'})
-            }else {
-                let taskUser =await TaskModel.findAll()
-                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
-                const totalCount = await TaskModel.count();
-                const totalPages = Math.ceil(totalCount / limit);
-                return res.status(200).json({task:allTask, totalPages, users})
-            }
-        }else if(status !== undefined && foolName && email){
-            let taskFilter = await TaskModel.findAll({limit:limit, offset:offset, where:{[Op.or]:[{status: status}]}, include:[{model: UserModels, as: 'user', where:{[Op.or]: [{ foolName: foolName }, { email: email }]}}]})
-            if (!taskFilter.length){
-                return res.status(409).json({message: ''})
-            }else {
-                let taskUser =await TaskModel.findAll()
-                const totalCount = await TaskModel.count();
-                const totalPages = Math.ceil(totalCount / limit);
-                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
-                return res.status(200).json({task:taskFilter, totalPages, users})
-            }
-        }else if (status !== undefined && !foolName && !email){
-            let taskStatus =await TaskModel.findAll({limit:limit, offset:offset, where:{status:status}, include:[{model: UserModels, as: 'user'}]})
-            if (!taskStatus.length){
-                return res.status(409).json({message: 'Задачи Ненайдены'})
-            }else {
-                let taskUser =await TaskModel.findAll()
-                const totalCount = await TaskModel.count();
-                const totalPages = Math.ceil(totalCount / limit);
-                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
-                return res.status(200).json({task:taskStatus, totalPages, users})
-            }
-        }else if (foolName && status !== undefined && !email){
-            let taskFoolName =await TaskModel.findAll({limit:limit, offset:offset, where:{status:status}, include:[{model: UserModels, as: 'user', where: {foolName:foolName}}]})
-            if (!taskFoolName.length){
-                return res.status(409).json({message: 'Задачи с таким пользователем не найдены'})
-            }else {
-                let taskUser =await TaskModel.findAll()
-                const totalCount = await TaskModel.count();
-                const totalPages = Math.ceil(totalCount / limit);
-                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
-                return res.status(200).json({task:taskFoolName, totalPages, users})
-            }
-        }else if (email && status !== undefined && !foolName){
-            let taskEmail=await TaskModel.findAll({limit:limit, offset:offset, where:{status:status}, include:[{model: UserModels, as: 'user', where: {emil:email}}]})
-            if (!taskEmail.length){
-                return res.status(409).json({message: 'Задачи с таким Email не найдены'})
-            }else {
-                let taskUser =await TaskModel.findAll()
-                const totalCount = await TaskModel.count();
-                const totalPages = Math.ceil(totalCount / limit);
-                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
-                return res.status(200).json({task:taskEmail, totalPages, users})
-            }
-
-        }else if (status === undefined && !email && foolName){
-            let name =await TaskModel.findAll({limit:limit, offset:offset, include:[{model: UserModels, as: 'user', where: {foolName:foolName}}]})
-            if (!name.length){
-                return res.status(409).json({message: 'Такой пользователь не найден'})
-            }else {
-                let taskUser =await TaskModel.findAll()
-                const totalCount = await TaskModel.count();
-                const totalPages = Math.ceil(totalCount / limit);
-                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
-                return res.status(200).json({task:name, totalPages, users})
-            }
-        }else if (status === undefined && email && !foolName){
-            let taskEmail=await TaskModel.findAll({limit:limit, offset:offset, include:[{model: UserModels, as: 'user', where: {emil:email}}]})
-            if (!taskEmail.length){
-                return res.status(409).json({message: 'Такой Email Не найден'})
-            }else {
-                let taskUser =await TaskModel.findAll()
-                const totalCount = await TaskModel.count();
-                const totalPages = Math.ceil(totalCount / limit);
-                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
-                return res.status(200).json({task:taskEmail, totalPages, users})
-            }
         }
     }
 }

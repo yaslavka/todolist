@@ -11,7 +11,7 @@ function App() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
   const status = useSelector((state) => state.task.status)
   const email = useSelector((state) => state.task.email)
-  const foolName = useSelector((state) => state.task.email)
+  const foolName = useSelector((state) => state.task.foolName)
   const pages = useSelector((state) => state.task.pages)
   useEffect(()=>{
     if (isAuthenticated){

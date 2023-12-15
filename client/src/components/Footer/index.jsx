@@ -5,7 +5,9 @@ function Footer() {
     return (
         <>
             <footer className={styles.footer}>
-
+                <article>
+                    © 2023 Все права защищены.
+                </article>
             </footer>
         </>
     )

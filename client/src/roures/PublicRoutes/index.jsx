@@ -4,7 +4,6 @@ import omit from 'lodash-es/omit'
 import routesLik from "../../constants/routes.constants";
 import RouteWithSubRoutes from "../../components/RouteWithSubRoutes";
 import {publicRouteConfig} from "../../routes";
-import styles from './publicRoute.module.scss'
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import {useDispatch, useSelector} from "react-redux";
@@ -34,18 +33,16 @@ function PublicRoutes() {
         <>
             <BrowserRouter>
                 <Router>
-                    <div className={styles.globalWrapper}>
-                        <Header modalAuth={modalAuth} modalSignUp={modalSignUp}/>
-                        {modalAuthVisible && <ModalAuth modalAuthVisible={modalAuthVisible} modalAuth={modalAuth}/>}
-                        {modalSignUpVisible && <ModalSignUp modalSignUpVisible={modalSignUpVisible} modalSignUp={modalSignUp}/>}
-                        <Switch>
-                            {publicRouteConfig.map((route)=>(
-                                <RouteWithSubRoutes key={route.id} {...omit(route, 'id')}/>
-                            ))}
-                            <Redirect to={routesLik.root}/>
-                        </Switch>
-                        <Footer/>
-                    </div>
+                    <Header modalAuth={modalAuth} modalSignUp={modalSignUp}/>
+                    {modalAuthVisible && <ModalAuth modalAuthVisible={modalAuthVisible} modalAuth={modalAuth}/>}
+                    {modalSignUpVisible && <ModalSignUp modalSignUpVisible={modalSignUpVisible} modalSignUp={modalSignUp}/>}
+                    <Switch>
+                        {publicRouteConfig.map((route)=>(
+                            <RouteWithSubRoutes key={route.id} {...omit(route, 'id')}/>
+                        ))}
+                        <Redirect to={routesLik.root}/>
+                    </Switch>
+                    <Footer/>
                 </Router>
             </BrowserRouter>
         </>

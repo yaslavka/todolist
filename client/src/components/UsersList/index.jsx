@@ -1,12 +1,19 @@
 import React from "react";
-import * as actionTask from "../../actions/task.actions";
-import {useDispatch} from "react-redux";
+import styles from './userList.module.css'
 
-function UsersList({user}) {
-    const dispatch = useDispatch()
+function UsersList({user, setSearchUser, email}) {
+
     return (
         <>
-            <button onClick={()=>{dispatch(actionTask.taskUserFoolName(user.foolName))}}>{user.foolName}</button>
+            {email ? (
+                <div className={styles.userListContainer}>
+                    <button onClick={()=>{setSearchUser(user.email)}} className={styles.userBottom}>{user.email}</button>
+                </div>
+            ):(
+                <div className={styles.userListContainer}>
+                    <button onClick={()=>{setSearchUser(user.foolName)}} className={styles.userBottom}>{user.foolName}</button>
+                </div>
+            )}
         </>
     )
 }

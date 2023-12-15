@@ -18,7 +18,7 @@ function RootPages() {
     const modalSortEmail = useSelector((state) => state.useState.modalSortEmailVisible)
     const status = useSelector((state) => state.task.status)
     const email = useSelector((state) => state.task.email)
-    const foolName = useSelector((state) => state.task.email)
+    const foolName = useSelector((state) => state.task.foolName)
     const modalSortAdd = useSelector((state) => state.useState.modalSortAddVisible)
 
     const modalName = useCallback(() => {
@@ -50,14 +50,17 @@ function RootPages() {
         dispatch(actionTask.taskPages(page))
         //dispatch(actionTask.taskUserEmail(email))
     }
-
     const titleMap = [
         'Номер п/п', 'статус', 'Задача', 'Email', 'Автор', 'Телефон'
     ];
     const titleAdmin = [
         'Номер п/п', 'статус', 'Задача', 'Email', 'Автор', 'Телефон', 'Опции'
     ];
-
+    const resetFilter = useCallback(()=>{
+        dispatch(actionTask.taskPages(1))
+        dispatch(actionTask.taskUserFoolName(null))
+        dispatch(actionTask.taskUserEmail(null))
+    },[dispatch])
     return (
         <>
             <main className={styles.main}>
@@ -69,7 +72,7 @@ function RootPages() {
                         <Button color={'primary'} className={styles.sortButton} onClick={modalName}>
                             По имени
                         </Button>
-                        <Button color={'primary'} className={styles.sortButton}>
+                        <Button color={'primary'} className={styles.sortButton} onClick={modalEmailSort}>
                             По Email
                         </Button>
                         <Button color={'primary'} className={styles.sortButton} onClick={()=>{dispatch(actionTask.status(false))}} >
@@ -77,6 +80,9 @@ function RootPages() {
                         </Button>
                         <Button color={'primary'} className={styles.sortButton} onClick={()=>{dispatch(actionTask.status(true))}} >
                             Выполненые
+                        </Button>
+                        <Button color={'primary'} className={styles.sortButton} onClick={resetFilter} >
+                            Сбросить фильтер
                         </Button>
                     </section>
                     <Button color={'primary'} className={styles.sortButton} onClick={modalAddTask}>
