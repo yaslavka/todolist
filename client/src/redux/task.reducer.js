@@ -1,12 +1,15 @@
 import * as ActionTypes from '../constants/task.constants'
 
 const initialState = {
+    pages: 1,
+    status: undefined,
+    email: null,
+    foolName: null,
     task: null,
     taskAdd: null,
     taskAuthAdd: null,
     taskStatus: null,
     taskEdit: null,
-    taskFilter:null,
     loadings: {
         task: false,
         taskAdd: false,
@@ -21,7 +24,6 @@ const initialState = {
         taskAuthAdd: null,
         taskStatus: null,
         taskEdit: null,
-        taskFilter:null,
     },
 }
 const taskReducer = (state = initialState, action) =>{
@@ -147,28 +149,21 @@ const taskReducer = (state = initialState, action) =>{
             }
         }
 
-        case ActionTypes.TASK_FILTER_REQUEST: {
-            return {
-                ...state,
-                loadings: { ...state.loadings, taskFilter: true },
-                errors: { ...state.errors, taskFilter: null },
-            }
+        case ActionTypes.TASK_PAGES: {
+            const pages = action.payload
+            return {...state, pages: pages}
         }
-        case ActionTypes.TASK_FILTER_SUCCESS: {
-            const taskFilter = action.payload
-            return {
-                ...state,
-                loadings: { ...state.loadings, taskFilter: false },
-                errors: { ...state.errors, taskFilter: null },
-                taskFilter,
-            }
+        case ActionTypes.TASK_STATUS: {
+            const status = action.payload
+            return {...state, status: status}
         }
-        case ActionTypes.TASK_FILTER_ERROR: {
-            return {
-                ...state,
-                loadings: { ...state.loadings, taskFilter: false },
-                errors: { ...state.errors, taskFilter: action.payload },
-            }
+        case ActionTypes.TASK_USER_EMAIL: {
+            const email = action.payload
+            return {...state, email: email}
+        }
+        case ActionTypes.TASK_USER_NAME: {
+            const foolName = action.payload
+            return {...state, foolName: foolName}
         }
         default:
             return state

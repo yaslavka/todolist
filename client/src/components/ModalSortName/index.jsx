@@ -4,7 +4,7 @@ import styles from './modalSortName.module.scss'
 import {Button, Input} from "reactstrap";
 import UsersList from "../UsersList";
 
-function ModalSortName({onClick, modalSortName, nameUsers, setName}) {
+function ModalSortName({onClick, modalSortName, nameUsers}) {
     const [searchUser, setSearchUser] = useState('');
     const filteredUsers = nameUsers
         ? nameUsers.filter((user) =>
@@ -22,7 +22,7 @@ function ModalSortName({onClick, modalSortName, nameUsers, setName}) {
                 <Modal.Body>
                     <Input className={styles.input} value={searchUser} onChange={(e)=>setSearchUser(e.target.value)}/>
                     {filteredUsers && filteredUsers.map((user, index)=>(
-                        <UsersList user={user} key={index} setName={setName}/>
+                        <UsersList user={user} key={index}/>
                     ))}
                 </Modal.Body>
                 <Modal.Footer>

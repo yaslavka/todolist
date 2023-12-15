@@ -16,16 +16,21 @@ export const taskInfoError = (error) => ({
 })
 
 export const taskPages = (values) => ({
-    type: ActionTypes.TASK_FILTER_REQUEST,
+    type: ActionTypes.TASK_PAGES,
     payload: values,
 })
 export const taskUserFoolName = (values) => ({
-    type: ActionTypes.TASK_FILTER_SUCCESS,
+    type: ActionTypes.TASK_USER_NAME,
     payload: values,
 
 })
 export const taskUserEmail = (error) => ({
-    type: ActionTypes.TASK_FILTER_ERROR,
+    type: ActionTypes.TASK_USER_EMAIL,
+    payload: error,
+})
+
+export const status = (error) => ({
+    type: ActionTypes.TASK_STATUS,
     payload: error,
 })
 
@@ -82,19 +87,5 @@ export const taskEditSuccess = (values) => ({
 })
 export const taskEditError = (error) => ({
     type: ActionTypes.TASK_EDIT_ERROR,
-    payload: error,
-})
-
-export const taskFilter = (values) => ({
-    type: ActionTypes.TASK_FILTER_REQUEST,
-    payload: values,
-})
-export const taskFilterSuccess = (values) => ({
-    type: ActionTypes.TASK_FILTER_SUCCESS,
-    payload: values,
-
-})
-export const taskFilterError = (error) => ({
-    type: ActionTypes.TASK_FILTER_ERROR,
     payload: error,
 })

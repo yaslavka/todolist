@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback} from "react";
 import styles from './main.module.scss'
 import {Button} from "reactstrap";
 import {useDispatch, useSelector} from "react-redux";
@@ -13,18 +13,13 @@ function RootPages() {
     const dispatch = useDispatch()
     const userInfo = useSelector((state) => state.app.user)
     const task = useSelector((state) => state.task.task)
-    const pages = null
+    const pages = useSelector((state) => state.task.pages)
     const modalSortName = useSelector((state) => state.useState.modalSortNameVisible)
     const modalSortEmail = useSelector((state) => state.useState.modalSortEmailVisible)
-    const modalSortStatus = useSelector((state) => state.useState.modalSortStatusVisible)
+    const status = useSelector((state) => state.task.status)
+    const email = useSelector((state) => state.task.email)
+    const foolName = useSelector((state) => state.task.email)
     const modalSortAdd = useSelector((state) => state.useState.modalSortAddVisible)
-    const [name, setName]=useState('')
-    const [email, setEmail]=useState('')
-    const [status, setStatus]=useState()
-
-    useEffect(()=>{
-        dispatch(actionTask.taskInfo({pages: pages ? pages: localStorage.getItem('pages') ? localStorage.getItem('pages'): 1, count: 3 , foolName:name, email:email, status:status}))
-    },[dispatch])
 
     const modalName = useCallback(() => {
         if (modalSortName === false) {
@@ -49,17 +44,11 @@ function RootPages() {
             dispatch(modalActions.modalSortEmail(false))
         }
     }, [dispatch, modalSortEmail])
-    const modalStatusSort = useCallback(() => {
-        if (modalSortStatus === false) {
-            dispatch(modalActions.modalSortStatus(true))
-        } else {
-            dispatch(modalActions.modalSortStatus(false))
-        }
-    }, [dispatch, modalSortStatus])
 
-    const nextPages = (pages)=>{
-        dispatch(actionTask.taskInfo({pages: pages ? pages: localStorage.getItem('pages') ? localStorage.getItem('pages'): 1, count: 3 , foolName:name, email:email, status:status}))
-        localStorage.setItem('pages', pages)
+    const nextPages = (page)=>{
+        dispatch(actionTask.taskInfo({pages: page ? page : pages, count: 3 , foolName:foolName, email:email, status:status}))
+        dispatch(actionTask.taskPages(page))
+        //dispatch(actionTask.taskUserEmail(email))
     }
 
     const titleMap = [
@@ -68,17 +57,6 @@ function RootPages() {
     const titleAdmin = [
         'Номер п/п', 'статус', 'Задача', 'Email', 'Автор', 'Телефон', 'Опции'
     ];
-
-
-    const changeStatus =()=>{
-        if (status === undefined){
-            setStatus(false)
-        }else if (status === false){
-            setStatus(true)
-        }else {
-            setStatus(false)
-        }
-    }
 
     return (
         <>
@@ -94,8 +72,11 @@ function RootPages() {
                         <Button color={'primary'} className={styles.sortButton}>
                             По Email
                         </Button>
-                        <Button color={'primary'} className={styles.sortButton} onClick={changeStatus} >
-                            По Статусу
+                        <Button color={'primary'} className={styles.sortButton} onClick={()=>{dispatch(actionTask.status(false))}} >
+                            Не выполненые
+                        </Button>
+                        <Button color={'primary'} className={styles.sortButton} onClick={()=>{dispatch(actionTask.status(true))}} >
+                            Выполненые
                         </Button>
                     </section>
                     <Button color={'primary'} className={styles.sortButton} onClick={modalAddTask}>
@@ -125,18 +106,18 @@ function RootPages() {
                              ))}
                          </article>
                          {Array.from({length: task.totalPages}, (_, index) =>(
-                             <button key={index +1} onClick={()=>{nextPages(index + 1, 3)}} className={styles.pagesButton}>{index + 1}</button>
+                             <button key={index +1} onClick={()=>{nextPages(index + 1)}} className={styles.pagesButton}>{index + 1}</button>
                          ))}
                     </section>
                 )}
                 {modalSortName &&
-                <ModalSortName modalSortName={modalSortName} onClick={modalName} nameUsers={task && task.users} setName={setName}/>
+                <ModalSortName modalSortName={modalSortName} onClick={modalName} nameUsers={task && task.users}/>
                 }
                 {modalSortAdd &&
                 <ModalAddTask onClick={modalAddTask} modalSortAdd={modalSortAdd}/>
                 }
                 {modalSortEmail &&
-                <ModalSortEmail onClick={modalEmailSort} modalSortEmail={modalSortEmail} emailUsers={task && task.users} setEmail={setEmail}/>
+                <ModalSortEmail onClick={modalEmailSort} modalSortEmail={modalSortEmail} emailUsers={task && task.users}/>
                 }
             </main>
         </>

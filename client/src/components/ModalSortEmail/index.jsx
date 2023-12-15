@@ -1,7 +1,9 @@
 import React from "react";
+import {useDispatch} from "react-redux";
 
 
-function ModalSortEmail({setEmail, emailUsers, modalSortEmail, onClick}) {
+function ModalSortEmail({emailUsers, modalSortEmail, onClick}) {
+    const dispatch = useDispatch()
     return (
         <>
 
