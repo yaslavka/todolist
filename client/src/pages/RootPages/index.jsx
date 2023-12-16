@@ -57,7 +57,7 @@ function RootPages() {
         dispatch(actionTask.taskUserFoolName(null))
         dispatch(actionTask.taskUserEmail(null))
         dispatch(actionTask.status(undefined))
-        dispatch(actionTask.taskInfoSuccess({task: task && task.task.sort((a, b) => b.id - a.id), users: task && task.users}))
+        dispatch(actionTask.taskInfoSuccess({task: task && task.task.sort((a, b) => a.id - b.id), users: task && task.users}))
     },[dispatch])
 
     const handleSort = () => {
