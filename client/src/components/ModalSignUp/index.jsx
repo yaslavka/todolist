@@ -8,6 +8,7 @@ import * as actions from '../../actions/auth.actions'
 import styles from "../ModalAddTask/modalAddTask.module.scss";
 import InputTodo from "../InputTodo";
 import {isValidEmail, isValidPassword, isValidPhone, isValidUsername} from "../../utils";
+import * as useStateAction from "../../actions/globalUseState.actions";
 
 function ModalSignUp({modalSignUp, modalSignUpVisible}) {
     const dispatch = useDispatch()
@@ -48,6 +49,7 @@ function ModalSignUp({modalSignUp, modalSignUpVisible}) {
     )
     const onSubmitSignUp =useCallback((credentials)=>{
         dispatch(actions.signUp({...credentials}))
+        dispatch(useStateAction.modalSinUp(false))
     },[dispatch])
     return (
         <>

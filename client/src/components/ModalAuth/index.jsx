@@ -7,7 +7,8 @@ import * as yup from 'yup'
 import * as actions from '../../actions/auth.actions'
 import styles from "../ModalAddTask/modalAddTask.module.scss";
 import InputTodo from "../InputTodo";
-import {isValidEmail, isValidPassword} from "../../utils";
+import {isValidEmail} from "../../utils";
+import * as useStateAction from "../../actions/globalUseState.actions";
 
 function ModalAuth({modalAuthVisible, modalAuth}) {
     const dispatch = useDispatch()
@@ -27,13 +28,13 @@ function ModalAuth({modalAuthVisible, modalAuth}) {
                     .test('email', 'Email должен быть test@mail.ru', (value) => isValidEmail(value)),
                 password: yup
                     .string()
-                    .required('Полеобязательно для заполнения')
-                    .test('password', 'пароль должен содержать 8 цифер латинские буквы одну маленькую одну большую и один специальный символ', (value) => isValidPassword(value)),
+                    .required('Полеобязательно для заполнения'),
             }),
         [],
     )
     const onSubmitSignIn =useCallback((credentials)=>{
         dispatch(actions.signIn({...credentials}))
+        dispatch(useStateAction.modalAuth(false))
     },[dispatch])
     return (
         <>

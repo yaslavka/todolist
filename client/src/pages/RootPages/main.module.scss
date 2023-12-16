@@ -86,9 +86,9 @@
   gap: 8px;
   max-width: 1500px;
   margin: 0 auto;
-  @media (max-width: 1440px) {
+  @media (max-width: 1366px) {
     max-width: initial;
-    width: 1390px;
+    width: 1211px;
   }
 }
 .ul {
@@ -112,7 +112,7 @@
   border-right: 1px solid grey;
   border-left: 1px solid grey;
   @media (max-width: 1440px) {
-    grid-template-columns: 100px 200px 200px 200px 200px 200px 300px;
+    grid-template-columns: 90px 140px 150px 190px 145px 125px 257px;
   }
 }
 .titleRow{

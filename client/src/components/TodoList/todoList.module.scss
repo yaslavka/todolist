@@ -5,15 +5,15 @@
   width: 100%;
   align-items: center;
   padding-left: 0;
-  margin-bottom: 0;
+  margin: 0 auto;
   border: 1px solid grey;
   border-bottom: none;
   &:last-child {
     border-bottom: 1px solid grey;
   }
-  @media (max-width: 1440px) {
-    grid-template-columns: 100px 200px 200px 200px 200px 200px 300px;
-    width: 1390px;
+  @media (max-width: 1366px) {
+    grid-template-columns: 90px 140px 150px 190px 145px 125px 257px;
+    width: 1211px;
   }
 }
 
@@ -43,6 +43,7 @@
   padding: 10px 0;
   text-align: center;
   border-right: 1px solid grey;
+  padding-inline: 5px;
   width: 100%;
   & p {
     margin-bottom: 0;
