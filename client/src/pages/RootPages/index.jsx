@@ -57,10 +57,11 @@ function RootPages() {
         dispatch(actionTask.taskUserFoolName(null))
         dispatch(actionTask.taskUserEmail(null))
         dispatch(actionTask.status(undefined))
+        dispatch(actionTask.taskInfoSuccess({task: task && task.task.sort((a, b) => b.id - a.id), users: task && task.users}))
     },[dispatch])
 
     const handleSort = () => {
-        dispatch(actionTask.taskInfoSuccess({task: task && task.task.sort((a, b) => b.id - a.id), users: task && task.users, totalPages:task && task.totalPages}))
+        dispatch(actionTask.taskInfoSuccess({task: task && task.task.sort((a, b) => b.id - a.id), users: task && task.users}))
 
     }
     let pagesNumber = []
