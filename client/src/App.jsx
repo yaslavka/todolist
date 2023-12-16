@@ -11,7 +11,6 @@ function App() {
   const status = useSelector((state) => state.task.status)
   const email = useSelector((state) => state.task.email)
   const foolName = useSelector((state) => state.task.foolName)
-  const pages = useSelector((state) => state.task.pages)
   useEffect(()=>{
     if (isAuthenticated){
       dispatch(actionUserInfo.userInfo())
@@ -19,8 +18,8 @@ function App() {
   }, [dispatch, isAuthenticated])
 
   useEffect(()=>{
-    dispatch(actionTask.taskInfo({pages: pages, count: 3 , foolName:foolName, email:email, status:status}))
-  },[dispatch, foolName, email, status, pages])
+    dispatch(actionTask.taskInfo({foolName:foolName, email:email, status:status}))
+  },[dispatch, foolName, email, status])
 
   if (!isAuthenticated){
     return <PublicRoutes/>

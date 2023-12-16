@@ -23,7 +23,7 @@ export function* taskAdd(action) {
         if (response) {
             yield put(actions.addTaskSuccess(response))
             toast.success(response.message)
-            const task = yield call(api.taskInfo, action.payload)
+            const task = yield call(api.taskInfo)
             yield put(actions.taskInfoSuccess(task))
         }
     } catch (error) {
@@ -37,7 +37,7 @@ export function* taskAuthAdd(action) {
         if (response) {
             yield put(actions.addTaskSuccess(response))
             toast.success(response.message)
-            const task = yield call(api.taskInfo, action.payload)
+            const task = yield call(api.taskInfo)
             yield put(actions.taskInfoSuccess(task))
         }
     } catch (error) {
@@ -52,7 +52,7 @@ export function* taskStatus(action) {
         if (response) {
             yield put(actions.taskStatusSuccess(response))
             toast.success(response.message)
-            const task = yield call(api.taskInfo, action.payload)
+            const task = yield call(api.taskInfo)
             yield put(actions.taskInfoSuccess(task))
         }
     } catch (error) {
@@ -67,7 +67,7 @@ export function* taskEdit(action) {
         if (response) {
             yield put(actions.taskEditSuccess(response))
             toast.success(response.message)
-            const task = yield call(api.taskInfo, action.payload)
+            const task = yield call(api.taskInfo)
             yield put(actions.taskInfoSuccess(task))
         }
     } catch (error) {

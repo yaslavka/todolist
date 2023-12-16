@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useState} from "react";
 import styles from './main.module.scss'
 import {Button} from "reactstrap";
 import {useDispatch, useSelector} from "react-redux";
@@ -11,14 +11,12 @@ import * as actionTask from "../../actions/task.actions";
 
 function RootPages() {
     const dispatch = useDispatch()
+    const [count]=useState(3)
     const userInfo = useSelector((state) => state.app.user)
     const task = useSelector((state) => state.task.task)
     const pages = useSelector((state) => state.task.pages)
     const modalSortName = useSelector((state) => state.useState.modalSortNameVisible)
     const modalSortEmail = useSelector((state) => state.useState.modalSortEmailVisible)
-    const status = useSelector((state) => state.task.status)
-    const email = useSelector((state) => state.task.email)
-    const foolName = useSelector((state) => state.task.foolName)
     const modalSortAdd = useSelector((state) => state.useState.modalSortAddVisible)
 
     const modalName = useCallback(() => {
@@ -46,9 +44,7 @@ function RootPages() {
     }, [dispatch, modalSortEmail])
 
     const nextPages = (page)=>{
-        dispatch(actionTask.taskInfo({pages: page ? page : pages, count: 3 , foolName:foolName, email:email, status:status}))
         dispatch(actionTask.taskPages(page))
-        //dispatch(actionTask.taskUserEmail(email))
     }
     const titleMap = [
         'Номер п/п', 'статус', 'Задача', 'Email', 'Автор', 'Телефон'
@@ -60,15 +56,31 @@ function RootPages() {
         dispatch(actionTask.taskPages(1))
         dispatch(actionTask.taskUserFoolName(null))
         dispatch(actionTask.taskUserEmail(null))
+        dispatch(actionTask.status(undefined))
     },[dispatch])
+
+    const handleSort = () => {
+        dispatch(actionTask.taskInfoSuccess({task: task && task.task.sort((a, b) => b.id - a.id), users: task && task.users, totalPages:task && task.totalPages}))
+
+    }
+    let pagesNumber = []
+    const lastTaskIndex = pages * count
+    const firstTaskIndex = lastTaskIndex - count
+    const currentPages = task && task.task.slice(firstTaskIndex, lastTaskIndex)
+
+
+    for (let i = 1; i <= Math.ceil(task && task.task.length / count); i++){
+        pagesNumber.push(i)
+    }
+    console.log(currentPages && currentPages)
     return (
         <>
             <main className={styles.main}>
                 <aside className={styles.sectionButton}>
                     <section className={styles.section}>
-                        <div className={styles.sortText}>
-                            Сортировать:
-                        </div>
+                        <Button color={'primary'} className={styles.sortButton} onClick={handleSort}>
+                            Сначало старые
+                        </Button>
                         <Button color={'primary'} className={styles.sortButton} onClick={modalName}>
                             По имени
                         </Button>
@@ -89,7 +101,7 @@ function RootPages() {
                         Добавить задачу
                     </Button>
                 </aside>
-                {task && (
+                {currentPages && (
                     <section className={styles.todoListContainer}>
                          <article className={userInfo?.isAdmin ? styles.sectionWrapperAdmin : styles.sectionWrapper}>
                              {userInfo?.isAdmin ? (
@@ -107,13 +119,13 @@ function RootPages() {
                              )}
                          </article>
                          <article className={styles.sectionTask}>
-                             {task.task.map((item, index) => (
+                             {currentPages.map((item, index) => (
                                  <TodoList list={item} key={index} userInfo={userInfo && userInfo}/>
                              ))}
                          </article>
-                         {Array.from({length: task.totalPages}, (_, index) =>(
-                             <button key={index +1} onClick={()=>{nextPages(index + 1)}} className={styles.pagesButton}>{index + 1}</button>
-                         ))}
+                        {pagesNumber.map((numberPages)=>(
+                            <button key={numberPages} onClick={()=>{nextPages(numberPages)}} className={styles.pagesButton}>{numberPages}</button>
+                        ))}
                     </section>
                 )}
                 {modalSortName &&
