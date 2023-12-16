@@ -3,8 +3,8 @@ import * as ActionTypes from '../constants/task.constants'
 const initialState = {
     pages: 1,
     status: undefined,
-    email: null,
-    foolName: null,
+    email: '',
+    foolName: '',
     task: null,
     taskAdd: null,
     taskAuthAdd: null,

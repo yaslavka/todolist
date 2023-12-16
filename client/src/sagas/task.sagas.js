@@ -5,9 +5,9 @@ import * as actions from '../actions/task.actions'
 import * as api from '../api/tak.api'
 
 
-export function* taskInfo(action) {
+export function* taskInfo() {
     try {
-        const response = yield call(api.taskInfo, action.payload)
+        const response = yield call(api.taskInfo)
         if (response) {
             yield put(actions.taskInfoSuccess(response))
         }

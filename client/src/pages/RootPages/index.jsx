@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import styles from './main.module.scss'
 import {Button} from "reactstrap";
 import {useDispatch, useSelector} from "react-redux";
@@ -8,6 +8,7 @@ import ModalSortName from "../../components/ModalSortName";
 import ModalAddTask from "../../components/ModalAddTask";
 import ModalSortEmail from "../../components/ModalSortEmail";
 import * as actionTask from "../../actions/task.actions";
+import filter from 'lodash.filter';
 
 function RootPages() {
     const dispatch = useDispatch()
@@ -18,7 +19,10 @@ function RootPages() {
     const modalSortName = useSelector((state) => state.useState.modalSortNameVisible)
     const modalSortEmail = useSelector((state) => state.useState.modalSortEmailVisible)
     const modalSortAdd = useSelector((state) => state.useState.modalSortAddVisible)
-
+    const status = useSelector((state) => state.task.status)
+    const email = useSelector((state) => state.task.email)
+    const foolName = useSelector((state) => state.task.foolName)
+    const [state, setState] = useState(task && task.task)
     const modalName = useCallback(() => {
         if (modalSortName === false) {
             dispatch(modalActions.modalSortName(true))
@@ -64,13 +68,28 @@ function RootPages() {
         dispatch(actionTask.taskInfoSuccess({task: task && task.task.sort((a, b) => b.id - a.id), users: task && task.users}))
 
     }
+    const containsTask=(tasks, statuses, name, emails)=>{
+        return (
+            tasks.status === statuses || tasks.user.foolName.toString() === name || tasks.user.email.toString() === emails
+        )
+    }
     let pagesNumber = []
     const lastTaskIndex = pages * count
     const firstTaskIndex = lastTaskIndex - count
-    const currentPages = task && task.task.slice(firstTaskIndex, lastTaskIndex)
+    let currentPages = state && state.slice(firstTaskIndex, lastTaskIndex)
+    const taskValue = task && task.task
+    useEffect(()=>{
+        const filterValue= filter(taskValue, item=>{
+            return containsTask(item, status, foolName, email)
+        })
+        if (filterValue.length === 0){
+           setState(taskValue)
+        }else {
+            setState(filterValue)
+        }
+    },[status, foolName, email, taskValue])
 
-
-    for (let i = 1; i <= Math.ceil(task && task.task.length / count); i++){
+    for (let i = 1; i <= Math.ceil(state.length / count); i++){
         pagesNumber.push(i)
     }
     return (
