@@ -5,86 +5,15 @@ const {TaskModel} = require("../../Models/TaskModel");
 
 class TaskControllers {
     async task(req, res){
-        let {status, foolName, email}=req.query
-        let taskStatus
-        if (status === 'undefined'){
-            taskStatus = undefined
-        }else if (status === 'true'){
-            taskStatus = true
-        }else if (status === 'false'){
-            taskStatus = false
+        let allTask =await TaskModel.findAll({include:[{model: UserModels, as: 'user'}]})
+        if (!allTask.length){
+            return res.status(409).json({message: 'Нет заданий'})
+        }else {
+            let taskUser =await TaskModel.findAll()
+            const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
+            return res.status(200).json({task:allTask, users})
         }
-        if (foolName === 'undefined'){
-            foolName = 'null'
-        }
-        if (email === 'undefined'){
-            email ='null'
-        }
-        if (foolName === 'null' && email === 'null' && taskStatus === undefined){
-            let allTask =await TaskModel.findAll({include:[{model: UserModels, as: 'user'}]})
-            if (!allTask.length){
-                return res.status(409).json({message: 'Фильткр сброшен'})
-            }else {
-                let taskUser =await TaskModel.findAll()
-                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
-                return res.status(200).json({task:allTask, users})
-            }
-        }else if(taskStatus !== undefined && foolName !== 'null' && email !== 'null'){
-            let taskFilter = await TaskModel.findAll({where:{[Op.or]:[{status: taskStatus}]}, include:[{model: UserModels, as: 'user', where:{[Op.or]: [{ foolName: foolName }, { email: email }]}}]})
-            if (!taskFilter.length){
-                return res.status(409).json({message: ''})
-            }else {
-                let taskUser =await TaskModel.findAll()
-                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
-                return res.status(200).json({task:taskFilter, users})
-            }
-        }else if (taskStatus !== undefined && foolName === 'null' && email === 'null'){
-            let status =await TaskModel.findAll({ where:{status:taskStatus}, include:[{model: UserModels, as: 'user'}]})
-            if (!status.length){
-                return res.status(409).json({message: 'Задачи Ненайдены'})
-            }else {
-                let taskUser =await TaskModel.findAll()
-                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
-                return res.status(200).json({task:status, users})
-            }
-        }else if (foolName !== 'null' && email === 'null' && taskStatus !== undefined){
-            let taskFoolName =await TaskModel.findAll({where:{status:taskStatus}, include:[{model: UserModels, as: 'user', where: {foolName:foolName}}]})
-            if (!taskFoolName.length){
-                return res.status(409).json({message: 'Задачи с таким пользователем не найдены'})
-            }else {
-                let taskUser =await TaskModel.findAll()
-                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
-                return res.status(200).json({task:taskFoolName, users})
-            }
-        }else if (foolName === 'null' && email !== 'null'&& taskStatus !== undefined){
-            let taskEmail=await TaskModel.findAll({where:{status:taskStatus}, include:[{model: UserModels, as: 'user', where: {emil:email}}]})
-            if (!taskEmail.length){
-                return res.status(409).json({message: 'Задачи с таким Email не найдены'})
-            }else {
-                let taskUser =await TaskModel.findAll()
-                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
-                return res.status(200).json({task:taskEmail, users})
-            }
 
-        }else if (taskStatus === undefined && foolName !== 'null' && email === 'null'){
-            let name =await TaskModel.findAll({include:[{model: UserModels, as: 'user', where: {foolName:foolName}}]})
-            if (!name.length){
-                return res.status(409).json({message: 'Такой пользователь не найден'})
-            }else {
-                let taskUser =await TaskModel.findAll()
-                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
-                return res.status(200).json({task:name, users})
-            }
-        }else if (taskStatus === undefined && foolName === 'null' && email !== 'null'){
-            let taskEmail=await TaskModel.findAll({include:[{model: UserModels, as: 'user', where: {emil:email}}]})
-            if (!taskEmail.length){
-                return res.status(409).json({message: 'Такой Email Не найден'})
-            }else {
-                let taskUser =await TaskModel.findAll()
-                const users = await UserModels.findAll({where:{id: taskUser.map(user=>user.userId)}})
-                return res.status(200).json({task:taskEmail, users})
-            }
-        }
     }
     async addTask(req, res){
         const {task, name, email, phone}=req.body
