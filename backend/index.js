@@ -6,19 +6,8 @@ const sequelize = require("./db");
 const cors = require("cors");
 const path = require("path");
 const bodyParser = require('body-parser');
-const multer = require("multer");
 const TaskControllers = require('./src/Controllers/TaskControllers')
 const UserController = require('./src/Controllers/UserControllers')
-
-const storage = multer.diskStorage({
-  destination(req, file, callback) {
-    callback(null, './files/images');
-  },
-  filename(req, file, callback) {
-    callback(null, `${file.fieldname}_${Date.now()}_${file.originalname}`);
-  },
-});
-const upload = multer({ storage });
 
 app.use(cors());
 app.use(express.json());
