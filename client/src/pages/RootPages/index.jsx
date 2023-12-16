@@ -72,7 +72,6 @@ function RootPages() {
     for (let i = 1; i <= Math.ceil(task && task.task.length / count); i++){
         pagesNumber.push(i)
     }
-    console.log(currentPages && currentPages)
     return (
         <>
             <main className={styles.main}>

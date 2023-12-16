@@ -1,24 +1,36 @@
 require("dotenv").config();
+const fs = require("fs");
 const http = require("http");
+const https = require("https");
 const express = require("express");
 const app = express();
 const sequelize = require("./db");
 const cors = require("cors");
 const path = require("path");
 const bodyParser = require('body-parser');
-const multer = require("multer");
 const TaskControllers = require('./src/Controllers/TaskControllers')
 const UserController = require('./src/Controllers/UserControllers')
 
-const storage = multer.diskStorage({
-  destination(req, file, callback) {
-    callback(null, './files/images');
-  },
-  filename(req, file, callback) {
-    callback(null, `${file.fieldname}_${Date.now()}_${file.originalname}`);
-  },
-});
-const upload = multer({ storage });
+const privateKey = fs.readFileSync(
+    "/etc/letsencrypt/live/my-backend.ru/privkey.pem",
+    "utf8"
+);
+const certificate = fs.readFileSync(
+    "/etc/letsencrypt/live/my-backend.ru/cert.pem",
+    "utf8"
+);
+const ca = fs.readFileSync(
+    "/etc/letsencrypt/live/my-backend.ru/chain.pem",
+    "utf8"
+);
+
+
+const credentials = {
+  key: privateKey,
+  cert: certificate,
+  ca: ca,
+};
+
 
 app.use(cors());
 app.use(express.json());
@@ -26,6 +38,7 @@ app.use(bodyParser.json());
 app.use("/api/images", express.static(path.resolve(__dirname, "files", "images")));
 
 const server = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
 
 app.get('/api/task', TaskControllers.task)
 app.get('/api/user', UserController.user)
@@ -42,6 +55,7 @@ const start = async () => {
     await sequelize.authenticate();
     await sequelize.sync();
     server.listen(80, () => console.log(`server started on port 80`));
+    httpsServer.listen(443, () => console.log(`server started on port 443`));
   }catch (error){
     console.log(error);
   }
