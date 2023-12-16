@@ -1,4 +1,3 @@
-import './App.css';
 import {useDispatch, useSelector} from "react-redux";
 import * as actionUserInfo from './actions/app.actions'
 import {useEffect} from "react";

@@ -75,7 +75,7 @@
   margin: 0 auto;
   @media (max-width: 1440px) {
     max-width: initial;
-    width: 1099px;
+    width: 1211px;
   }
 }
 
@@ -101,6 +101,7 @@
   border-top: 1px solid grey;
   border-right: 1px solid grey;
   border-left: 1px solid grey;
+  justify-content: space-between;
   @media (max-width: 1440px) {
     grid-template-columns: 100px 200px 200px 200px 200px 200px;
   }
@@ -111,6 +112,7 @@
   border-top: 1px solid grey;
   border-right: 1px solid grey;
   border-left: 1px solid grey;
+  justify-content: space-between;
   @media (max-width: 1440px) {
     grid-template-columns: 90px 140px 150px 190px 145px 125px 257px;
   }

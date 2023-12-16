@@ -17,7 +17,7 @@ function Header({modalAuth, modalSignUp}) {
         <>
             <header className={styles.header}>
                 <Link to={'/'}>
-                    <img src={logo} className="App-logo" alt="logo" />
+                    <img src={logo} className={styles.appLogo} alt="logo" />
                 </Link>
                 <div className={styles.headerCenter}>
                     TODO TEST LIST

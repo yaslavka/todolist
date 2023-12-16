@@ -8,6 +8,7 @@
   margin: 0 auto;
   border: 1px solid grey;
   border-bottom: none;
+  justify-content: space-between;
   &:last-child {
     border-bottom: 1px solid grey;
   }
@@ -24,6 +25,7 @@
   align-items: center;
   padding-left: 0;
   border: 1px solid grey;
+  justify-content: space-between;
   border-bottom: none;
   margin: 0 auto;
   &:last-child {
@@ -31,7 +33,7 @@
   }
   @media (max-width: 1440px) {
     grid-template-columns: 100px 200px 200px 200px 200px 200px;
-    width: 1099px;
+    width: 1211px;
   }
 }
 .taskRow{
